@@ -77,6 +77,17 @@ let rec main () =
 
   Main.main ()
 
+and  make_tile container coord playe (board:Board.board) sub_boxes vbox=
+  let box = GPack.vbox ~packing:container#add ~width:100 ~height:100 () in
+  let button = GButton.button ~packing:box#add () in
+  button#connect#clicked ~callback: (fun () ->
+      let m = {player = playe;
+              coordinate = coord} in
+      let new_board = update board m in
+      draw sub_boxes vbox new_board (opp playe)
+    );
+  (button,box)
+
 and draw sboxs vbox board pl =
   List.map (fun x -> x#destroy ()) sboxs;
 
@@ -92,546 +103,77 @@ and draw sboxs vbox board pl =
 
   let game_board = board in
 
-  let box_r1c1 = GPack.vbox ~packing:sub_box1#add ~width:100 ~height:100 () in
-  let r1c1 = GButton.button ~packing:box_r1c1#add () in
-  r1c1#connect#clicked ~callback: (fun () ->
-      let m = {player = pl;
-              coordinate = "1A"} in
-      let new_board = update game_board m in
-      draw sboxs vbox new_board (opp pl)
-    );
-
-
-  let box_r1c2 = GPack.vbox ~packing:sub_box1#add ~width:100 ~height:100 () in
-  let r1c2 = GButton.button ~packing:box_r1c2#add () in
-  r1c2#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "2A"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r1c3 = GPack.vbox ~packing:sub_box1#add ~width:100 ~height:100 () in
-  let r1c3 = GButton.button ~packing:box_r1c3#add () in
-  r1c3#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "3A"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r1c4 = GPack.vbox ~packing:sub_box1#add ~width:100 ~height:100 () in
-  let r1c4 = GButton.button ~packing:box_r1c4#add () in
-  r1c4#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "4A"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r1c5 = GPack.vbox ~packing:sub_box1#add ~width:100 ~height:100 () in
-  let r1c5 = GButton.button ~packing:box_r1c5#add () in
-  r1c5#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "5A"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r1c6 = GPack.vbox ~packing:sub_box1#add ~width:100 ~height:100 () in
-  let r1c6 = GButton.button ~packing:box_r1c6#add () in
-  r1c6#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "6A"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r1c7 = GPack.vbox ~packing:sub_box1#add ~width:100 ~height:100 () in
-  let r1c7 = GButton.button ~packing:box_r1c7#add () in
-  r1c7#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "7A"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r1c8 = GPack.vbox ~packing:sub_box1#add ~width:100 ~height:100 () in
-  let r1c8 = GButton.button ~packing:box_r1c8#add () in
-  r1c8#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "8A"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r2c1 = GPack.vbox ~packing:sub_box2#add ~width:100 ~height:100 () in
-  let r2c1 = GButton.button ~packing:box_r2c1#add () in
-  r2c1#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "1B"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r2c2 = GPack.vbox ~packing:sub_box2#add ~width:100 ~height:100 () in
-  let r2c2 = GButton.button ~packing:box_r2c2#add () in
-  r2c2#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "2B"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r2c3 = GPack.vbox ~packing:sub_box2#add ~width:100 ~height:100 () in
-  let r2c3 = GButton.button ~packing:box_r2c3#add () in
-  r1c3#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "3B"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r2c4 = GPack.vbox ~packing:sub_box2#add ~width:100 ~height:100 () in
-  let r2c4 = GButton.button ~packing:box_r2c4#add () in
-  r2c4#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "4B"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r2c5 = GPack.vbox ~packing:sub_box2#add ~width:100 ~height:100 () in
-  let r2c5 = GButton.button ~packing:box_r2c5#add () in
-  r1c5#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "5B"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r2c6 = GPack.vbox ~packing:sub_box2#add ~width:100 ~height:100 () in
-  let r2c6 = GButton.button ~packing:box_r2c6#add () in
-  r2c6#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "6B"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r2c7 = GPack.vbox ~packing:sub_box2#add ~width:100 ~height:100 () in
-  let r2c7 = GButton.button ~packing:box_r2c7#add () in
-  r2c7#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "7B"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r2c8 = GPack.vbox ~packing:sub_box2#add ~width:100 ~height:100 () in
-  let r2c8 = GButton.button ~packing:box_r2c8#add () in
-  r2c8#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "8B"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r3c1 = GPack.vbox ~packing:sub_box3#add ~width:100 ~height:100 () in
-  let r3c1 = GButton.button ~packing:box_r3c1#add () in
-  r3c1#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "1C"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r3c2 = GPack.vbox ~packing:sub_box3#add ~width:100 ~height:100 () in
-  let r3c2 = GButton.button ~packing:box_r3c2#add () in
-  r3c2#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "2C"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r3c3 = GPack.vbox ~packing:sub_box3#add ~width:100 ~height:100 () in
-  let r3c3 = GButton.button ~packing:box_r3c3#add () in
-  r3c3#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "3C"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r3c4 = GPack.vbox ~packing:sub_box3#add ~width:100 ~height:100 () in
-  let r3c4 = GButton.button ~packing:box_r3c4#add () in
-  r3c4#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "4C"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r3c5 = GPack.vbox ~packing:sub_box3#add ~width:100 ~height:100 () in
-  let r3c5 = GButton.button ~packing:box_r3c5#add () in
-  r3c5#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "5C"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r3c6 = GPack.vbox ~packing:sub_box3#add ~width:100 ~height:100 () in
-  let r3c6 = GButton.button ~packing:box_r3c6#add () in
-  r3c6#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "6C"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r3c7 = GPack.vbox ~packing:sub_box3#add ~width:100 ~height:100 () in
-  let r3c7 = GButton.button ~packing:box_r3c7#add () in
-  r3c7#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "7C"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r3c8 = GPack.vbox ~packing:sub_box3#add ~width:100 ~height:100 () in
-  let r3c8 = GButton.button ~packing:box_r3c8#add () in
-  r3c8#connect#clicked ~callback: (fun () ->
-  let m = {player = pl;
-          coordinate = "8C"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
-
-  let box_r4c1 = GPack.vbox ~packing:sub_box4#add ~width:100 ~height:100 () in
-  let r4c1 = GButton.button ~packing:box_r4c1#add () in
-  r4c1#connect#clicked ~callback: (fun () -> let m = {player = pl;
-        coordinate = "1D"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r4c2 = GPack.vbox ~packing:sub_box4#add ~width:100 ~height:100 () in
-  let r4c2 = GButton.button ~packing:box_r4c2#add () in
-  r4c2#connect#clicked ~callback: (fun () ->
-
-      let m = {player = pl;
-        coordinate = "2D"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r4c3 = GPack.vbox ~packing:sub_box4#add ~width:100 ~height:100 () in
-  let r4c3 = GButton.button ~packing:box_r4c3#add () in
-  r4c3#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "3D"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r4c4 = GPack.vbox ~packing:sub_box4#add ~width:100 ~height:100 () in
-  let r4c4 = GButton.button ~packing:box_r4c4#add () in
-  r4c4#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "4D"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r4c5 = GPack.vbox ~packing:sub_box4#add ~width:100 ~height:100 () in
-  let r4c5 = GButton.button ~packing:box_r4c5#add () in
-  r4c5#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "5D"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r4c6 = GPack.vbox ~packing:sub_box4#add ~width:100 ~height:100 () in
-  let r4c6 = GButton.button ~packing:box_r4c6#add () in
-  r4c6#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "6D"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r4c7 = GPack.vbox ~packing:sub_box4#add ~width:100 ~height:100 () in
-  let r4c7 = GButton.button ~packing:box_r4c7#add () in
-  r4c7#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "7D"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r4c8 = GPack.vbox ~packing:sub_box4#add ~width:100 ~height:100 () in
-  let r4c8 = GButton.button ~packing:box_r4c8#add () in
-  r4c8#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "8D"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r5c1 = GPack.vbox ~packing:sub_box5#add ~width:100 ~height:100 () in
-  let r5c1 = GButton.button ~packing:box_r5c1#add () in
-  r5c1#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "1E"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r5c2 = GPack.vbox ~packing:sub_box5#add ~width:100 ~height:100 () in
-  let r5c2 = GButton.button ~packing:box_r5c2#add () in
-  r5c2#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "2E"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r5c3 = GPack.vbox ~packing:sub_box5#add ~width:100 ~height:100 () in
-  let r5c3 = GButton.button ~packing:box_r5c3#add () in
-  r5c3#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "3E"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r5c4 = GPack.vbox ~packing:sub_box5#add ~width:100 ~height:100 () in
-  let r5c4 = GButton.button ~packing:box_r5c4#add () in
-  r5c4#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "4E"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r5c5 = GPack.vbox ~packing:sub_box5#add ~width:100 ~height:100 () in
-  let r5c5 = GButton.button ~packing:box_r5c5#add () in
-  r5c5#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "5E"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r5c6 = GPack.vbox ~packing:sub_box5#add ~width:100 ~height:100 () in
-  let r5c6 = GButton.button ~packing:box_r5c6#add () in
-  r5c6#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "6E"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r5c7 = GPack.vbox ~packing:sub_box5#add ~width:100 ~height:100 () in
-  let r5c7 = GButton.button ~packing:box_r5c7#add () in
-  r5c7#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "7E"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r5c8 = GPack.vbox ~packing:sub_box5#add ~width:100 ~height:100 () in
-  let r5c8 = GButton.button ~packing:box_r5c8#add () in
-  r5c8#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "8E"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r6c1 = GPack.vbox ~packing:sub_box6#add ~width:100 ~height:100 () in
-  let r6c1 = GButton.button ~packing:box_r6c1#add () in
-  r6c1#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "1F"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-
-  let box_r6c2 = GPack.vbox ~packing:sub_box6#add ~width:100 ~height:100 () in
-  let r6c2 = GButton.button ~packing:box_r6c2#add () in
-  r6c2#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "2F"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r6c3 = GPack.vbox ~packing:sub_box6#add ~width:100 ~height:100 () in
-  let r6c3 = GButton.button ~packing:box_r6c3#add () in
-  r6c3#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "3F"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r6c4 = GPack.vbox ~packing:sub_box6#add ~width:100 ~height:100 () in
-  let r6c4 = GButton.button ~packing:box_r6c4#add () in
-  r6c4#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "4F"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r6c5 = GPack.vbox ~packing:sub_box6#add ~width:100 ~height:100 () in
-  let r6c5 = GButton.button ~packing:box_r6c5#add () in
-  r6c5#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "5F"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r6c6 = GPack.vbox ~packing:sub_box6#add ~width:100 ~height:100 () in
-  let r6c6 = GButton.button ~packing:box_r6c6#add () in
-  r6c6#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "6F"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r6c7 = GPack.vbox ~packing:sub_box6#add ~width:100 ~height:100 () in
-  let r6c7 = GButton.button ~packing:box_r6c7#add () in
-  r6c7#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "7F"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r6c8 = GPack.vbox ~packing:sub_box6#add ~width:100 ~height:100 () in
-  let r6c8 = GButton.button ~packing:box_r6c8#add () in
-  r6c8#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "8F"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r7c1 = GPack.vbox ~packing:sub_box7#add ~width:100 ~height:100 () in
-  let r7c1 = GButton.button ~packing:box_r7c1#add () in
-  r7c1#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "1G"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r7c2 = GPack.vbox ~packing:sub_box7#add ~width:100 ~height:100 () in
-  let r7c2 = GButton.button ~packing:box_r7c2#add () in
-  r7c2#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "2G"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r7c3 = GPack.vbox ~packing:sub_box7#add ~width:100 ~height:100 () in
-  let r7c3 = GButton.button ~packing:box_r7c3#add () in
-  r7c3#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "3G"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r7c4 = GPack.vbox ~packing:sub_box7#add ~width:100 ~height:100 () in
-  let r7c4 = GButton.button ~packing:box_r7c4#add () in
-  r7c4#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "4G"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r7c5 = GPack.vbox ~packing:sub_box7#add ~width:100 ~height:100 () in
-  let r7c5 = GButton.button ~packing:box_r7c5#add () in
-  r7c5#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "5G"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r7c6 = GPack.vbox ~packing:sub_box7#add ~width:100 ~height:100 () in
-  let r7c6 = GButton.button ~packing:box_r7c6#add () in
-  r7c6#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "6G"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r7c7 = GPack.vbox ~packing:sub_box7#add ~width:100 ~height:100 () in
-  let r7c7 = GButton.button ~packing:box_r7c7#add () in
-  r7c7#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "7G"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r7c8 = GPack.vbox ~packing:sub_box7#add ~width:100 ~height:100 () in
-  let r7c8 = GButton.button ~packing:box_r7c8#add () in
-  r7c8#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "8G"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r8c1 = GPack.vbox ~packing:sub_box8#add ~width:100 ~height:100 () in
-  let r8c1 = GButton.button ~packing:box_r8c1#add () in
-  r8c1#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "1H"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r8c2 = GPack.vbox ~packing:sub_box8#add ~width:100 ~height:100 () in
-  let r8c2 = GButton.button ~packing:box_r8c2#add () in
-  r8c2#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "2H"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r8c3 = GPack.vbox ~packing:sub_box8#add ~width:100 ~height:100 () in
-  let r8c3 = GButton.button ~packing:box_r8c3#add () in
-  r8c3#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "3H"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r8c4 = GPack.vbox ~packing:sub_box8#add ~width:100 ~height:100 () in
-  let r8c4 = GButton.button ~packing:box_r8c4#add () in
-  r8c4#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "4H"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r8c5 = GPack.vbox ~packing:sub_box8#add ~width:100 ~height:100 () in
-  let r8c5 = GButton.button ~packing:box_r8c5#add () in
-  r8c5#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "5H"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r8c6 = GPack.vbox ~packing:sub_box8#add ~width:100 ~height:100 () in
-  let r8c6 = GButton.button ~packing:box_r8c6#add () in
-  r8c6#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "6H"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r8c7 = GPack.vbox ~packing:sub_box8#add ~width:100 ~height:100 () in
-  let r8c7 = GButton.button ~packing:box_r8c7#add () in
-  r8c7#connect#clicked ~callback: (fun () -> let m = {player = pl;
-coordinate = "7H"} in
-let new_board = update game_board m in
-draw sboxs vbox new_board (opp pl)
-  );
-
-  let box_r8c8 = GPack.vbox ~packing:sub_box8#add ~width:100 ~height:100 () in
-  let r8c8 = GButton.button ~packing:box_r8c8#add () in
-  r8c8#connect#clicked ~callback: (fun () ->
-        let m = {player = pl;
-          coordinate = "8H"} in
-  let new_board = update game_board m in
-  draw sboxs vbox new_board (opp pl)
-    );
+  let r1c1 = fst (make_tile sub_box1 "1A" pl game_board sboxs vbox) in
+  let r1c2 = fst (make_tile sub_box1 "2A" pl game_board sboxs vbox) in
+  let r1c3 = fst (make_tile sub_box1 "3A" pl game_board sboxs vbox) in
+  let r1c4 = fst (make_tile sub_box1 "4A" pl game_board sboxs vbox) in
+  let r1c5 = fst (make_tile sub_box1 "5A" pl game_board sboxs vbox) in
+  let r1c6 = fst (make_tile sub_box1 "6A" pl game_board sboxs vbox) in
+  let r1c7 = fst (make_tile sub_box1 "7A" pl game_board sboxs vbox) in
+  let r1c8 = fst (make_tile sub_box1 "8A" pl game_board sboxs vbox) in
+
+  let r2c1 = fst (make_tile sub_box2 "1B" pl game_board sboxs vbox) in
+  let r2c2 = fst (make_tile sub_box2 "2B" pl game_board sboxs vbox) in
+  let r2c3 = fst (make_tile sub_box2 "3B" pl game_board sboxs vbox) in
+  let r2c4 = fst (make_tile sub_box2 "4B" pl game_board sboxs vbox) in
+  let r2c5 = fst (make_tile sub_box2 "5B" pl game_board sboxs vbox) in
+  let r2c6 = fst (make_tile sub_box2 "6B" pl game_board sboxs vbox) in
+  let r2c7 = fst (make_tile sub_box2 "7B" pl game_board sboxs vbox) in
+  let r2c8 = fst (make_tile sub_box2 "8B" pl game_board sboxs vbox) in
+
+  let r3c1 = fst (make_tile sub_box3 "1C" pl game_board sboxs vbox) in
+  let r3c2 = fst (make_tile sub_box3 "2C" pl game_board sboxs vbox) in
+  let r3c3 = fst (make_tile sub_box3 "3C" pl game_board sboxs vbox) in
+  let r3c4 = fst (make_tile sub_box3 "4C" pl game_board sboxs vbox) in
+  let r3c5 = fst (make_tile sub_box3 "5C" pl game_board sboxs vbox) in
+  let r3c6 = fst (make_tile sub_box3 "6C" pl game_board sboxs vbox) in
+  let r3c7 = fst (make_tile sub_box3 "7C" pl game_board sboxs vbox) in
+  let r3c8 = fst (make_tile sub_box3 "8C" pl game_board sboxs vbox) in
+
+  let r4c1 = fst (make_tile sub_box4 "1D" pl game_board sboxs vbox) in
+  let r4c2 = fst (make_tile sub_box4 "2D" pl game_board sboxs vbox) in
+  let r4c3 = fst (make_tile sub_box4 "3D" pl game_board sboxs vbox) in
+  let r4c4 = fst (make_tile sub_box4 "4D" pl game_board sboxs vbox) in
+  let r4c5 = fst (make_tile sub_box4 "5D" pl game_board sboxs vbox) in
+  let r4c6 = fst (make_tile sub_box4 "6D" pl game_board sboxs vbox) in
+  let r4c7 = fst (make_tile sub_box4 "7D" pl game_board sboxs vbox) in
+  let r4c8 = fst (make_tile sub_box4 "8D" pl game_board sboxs vbox) in
+
+  let r5c1 = fst (make_tile sub_box5 "1E" pl game_board sboxs vbox) in
+  let r5c2 = fst (make_tile sub_box5 "2E" pl game_board sboxs vbox) in
+  let r5c3 = fst (make_tile sub_box5 "3E" pl game_board sboxs vbox) in
+  let r5c4 = fst (make_tile sub_box5 "4E" pl game_board sboxs vbox) in
+  let r5c5 = fst (make_tile sub_box5 "5E" pl game_board sboxs vbox) in
+  let r5c6 = fst (make_tile sub_box5 "6E" pl game_board sboxs vbox) in
+  let r5c7 = fst (make_tile sub_box5 "7E" pl game_board sboxs vbox) in
+  let r5c8 = fst (make_tile sub_box5 "8E" pl game_board sboxs vbox) in
+
+  let r6c1 = fst (make_tile sub_box6 "1F" pl game_board sboxs vbox) in
+  let r6c2 = fst (make_tile sub_box6 "2F" pl game_board sboxs vbox) in
+  let r6c3 = fst (make_tile sub_box6 "3F" pl game_board sboxs vbox) in
+  let r6c4 = fst (make_tile sub_box6 "4F" pl game_board sboxs vbox) in
+  let r6c5 = fst (make_tile sub_box6 "5F" pl game_board sboxs vbox) in
+  let r6c6 = fst (make_tile sub_box6 "6F" pl game_board sboxs vbox) in
+  let r6c7 = fst (make_tile sub_box6 "7F" pl game_board sboxs vbox) in
+  let r6c8 = fst (make_tile sub_box6 "8F" pl game_board sboxs vbox) in
+
+  let r7c1 = fst (make_tile sub_box7 "1G" pl game_board sboxs vbox) in
+  let r7c2 = fst (make_tile sub_box7 "2G" pl game_board sboxs vbox) in
+  let r7c3 = fst (make_tile sub_box7 "3G" pl game_board sboxs vbox) in
+  let r7c4 = fst (make_tile sub_box7 "4G" pl game_board sboxs vbox) in
+  let r7c5 = fst (make_tile sub_box7 "5G" pl game_board sboxs vbox) in
+  let r7c6 = fst (make_tile sub_box7 "6G" pl game_board sboxs vbox) in
+  let r7c7 = fst (make_tile sub_box7 "7G" pl game_board sboxs vbox) in
+  let r7c8 = fst (make_tile sub_box7 "8G" pl game_board sboxs vbox) in
+
+  let r8c1 = fst (make_tile sub_box8 "1H" pl game_board sboxs vbox) in
+  let r8c2 = fst (make_tile sub_box8 "2H" pl game_board sboxs vbox) in
+  let r8c3 = fst (make_tile sub_box8 "3H" pl game_board sboxs vbox) in
+  let r8c4 = fst (make_tile sub_box8 "4H" pl game_board sboxs vbox) in
+  let r8c5 = fst (make_tile sub_box8 "5H" pl game_board sboxs vbox) in
+  let r8c6 = fst (make_tile sub_box8 "6H" pl game_board sboxs vbox) in
+  let r8c7 = fst (make_tile sub_box8 "7H" pl game_board sboxs vbox) in
+  let r8c8 = fst (make_tile sub_box8 "8H" pl game_board sboxs vbox) in
 
   xpm_label_box ~file:(get_tile (List.assoc "1A" game_board)) ~packing:r1c1#add ();
   xpm_label_box ~file:(get_tile (List.assoc "2A" game_board)) ~packing:r1c2#add ();
