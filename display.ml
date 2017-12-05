@@ -45,11 +45,6 @@ let rec main () =
   let factory = new GMenu.factory file_menu ~accel_group in
   ignore (factory#add_item "Quit" ~key:_Q ~callback: Main.quit);
 
-  let factory = new GMenu.factory file_menu ~accel_group in
-  ignore (factory#add_item "Restart" ~key:_R ~callback: Main.quit);
-
-
-
   let sub_box1 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
   let sub_box2 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
   let sub_box3 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
@@ -61,16 +56,18 @@ let rec main () =
   let sboxs = [sub_box1; sub_box2; sub_box3; sub_box4; sub_box5; sub_box6; sub_box7; sub_box8] in
 
   let empty =
-                [ ("1A", 0); ("2A", 0); ("3A", 0); ("4A", 0); ("5A", 0); ("6A", 0); ("7A", 0); ("8A", 0);
-                  ("1B", 0); ("2B", 0); ("3B", 0); ("4B", 0); ("5B", 0); ("6B", 0); ("7B", 0); ("8B", 0);
-                  ("1C", 0); ("2C", 0); ("3C", 0); ("4C", 0); ("5C", 0); ("6C", 0); ("7C", 0); ("8C", 0);
-                  ("1D", 0); ("2D", 0); ("3D", 0); ("4D", 2); ("5D", 1); ("6D", 0); ("7D", 0); ("8D", 0);
-                  ("1E", 0); ("2E", 0); ("3E", 0); ("4E", 1); ("5E", 2); ("6E", 0); ("7E", 0); ("8E", 0);
-                  ("1F", 0); ("2F", 0); ("3F", 0); ("4F", 0); ("5F", 0); ("6F", 0); ("7F", 0); ("8F", 0);
-                  ("1G", 0); ("2G", 0); ("3G", 0); ("4G", 0); ("5G", 0); ("6G", 0); ("7G", 0); ("8G", 0);
-                  ("1H", 0); ("2H", 0); ("3H", 0); ("4H", 0); ("5H", 0); ("6H", 0); ("7H", 0); ("8H", 0);
-                ] in
+    [ ("1A", 0); ("2A", 0); ("3A", 0); ("4A", 0); ("5A", 0); ("6A", 0); ("7A", 0); ("8A", 0);
+      ("1B", 0); ("2B", 0); ("3B", 0); ("4B", 0); ("5B", 0); ("6B", 0); ("7B", 0); ("8B", 0);
+      ("1C", 0); ("2C", 0); ("3C", 0); ("4C", 0); ("5C", 0); ("6C", 0); ("7C", 0); ("8C", 0);
+      ("1D", 0); ("2D", 0); ("3D", 0); ("4D", 2); ("5D", 1); ("6D", 0); ("7D", 0); ("8D", 0);
+      ("1E", 0); ("2E", 0); ("3E", 0); ("4E", 1); ("5E", 2); ("6E", 0); ("7E", 0); ("8E", 0);
+      ("1F", 0); ("2F", 0); ("3F", 0); ("4F", 0); ("5F", 0); ("6F", 0); ("7F", 0); ("8F", 0);
+      ("1G", 0); ("2G", 0); ("3G", 0); ("4G", 0); ("5G", 0); ("6G", 0); ("7G", 0); ("8G", 0);
+      ("1H", 0); ("2H", 0); ("3H", 0); ("4H", 0); ("5H", 0); ("6H", 0); ("7H", 0); ("8H", 0);
+    ] in
 
+let factory = new GMenu.factory file_menu ~accel_group in
+  ignore (factory#add_item "Restart" ~key:_R ~callback: (fun () -> main ()) );
 
   draw sboxs vbox empty 1;
   window#show ();
