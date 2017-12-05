@@ -3,8 +3,8 @@ open Parse
 
 type state = {
   current_player: int;
-  game_board: Board.board ;
-  score: (int*int)
+  game_board: Board.board;
+  score: (int*int);
 }
 
 (* [update_player curr_player] is the player whose turn is next.
@@ -67,4 +67,3 @@ let update old_state cmnd =
                   score = (Board.get_score updated_board)}
             else {current_player=cp;game_board=board; score = scr}
       end
-

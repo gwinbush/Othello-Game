@@ -9,7 +9,7 @@ type move = {
 type direction = TL|TR|BL|BR|T|B|L|R
 
 let empty =
-	[ ("1A", 0); ("2A", 0); ("3A", 0); ("4A", 0); ("5A", 0); ("6A", 0); ("6A", 0); ("8A", 0);
+	[ ("1A", 0); ("2A", 0); ("3A", 0); ("4A", 0); ("5A", 0); ("6A", 0); ("7A", 0); ("8A", 0);
 		("1B", 0); ("2B", 0); ("3B", 0); ("4B", 0); ("5B", 0); ("6B", 0); ("7B", 0); ("8B", 0);
 		("1C", 0); ("2C", 0); ("3C", 0); ("4C", 0); ("5C", 0); ("6C", 0); ("7C", 0); ("8C", 0);
 		("1D", 0); ("2D", 0); ("3D", 0); ("4D", 2); ("5D", 1); ("6D", 0); ("7D", 0); ("8D", 0);
@@ -18,6 +18,30 @@ let empty =
 		("1G", 0); ("2G", 0); ("3G", 0); ("4G", 0); ("5G", 0); ("6G", 0); ("7G", 0); ("8G", 0);
 		("1H", 0); ("2H", 0); ("3H", 0); ("4H", 0); ("5H", 0); ("6H", 0); ("7H", 0); ("8H", 0);
  ]
+
+let board = ["1A"; "2A"; "3A"; "4A"; "5A"; "6A"; "7A"; "8A";
+             "1B"; "2B"; "3B"; "4B"; "5B"; "6B"; "6B"; "8B";
+             "1C"; "2C"; "3C"; "4C"; "5C"; "6C"; "6C"; "8C";
+             "1D"; "2D"; "3D"; "4D"; "5D"; "6D"; "6D"; "8D";
+             "1E"; "2E"; "3E"; "4E"; "5E"; "6E"; "6E"; "8E";
+             "1F"; "2F"; "3F"; "4F"; "5F"; "6F"; "6F"; "8F";
+             "1G"; "2G"; "3G"; "4G"; "5G"; "6G"; "6G"; "8G";
+             "1H"; "2H"; "3H"; "4H"; "5H"; "6H"; "6H"; "8H";]
+
+let rec print_board board b =
+  match b with
+  | [] -> ()
+  | h::t ->
+    let piece = List.assoc h board in
+    if (h.[0] = '8')
+      then
+        let () = ignore(Printf.printf "(%s,%d) \n" h piece) in
+        print_board board t
+      else
+        let a = ignore(Printf.printf "(%s, %d)  " h piece) in
+        print_board board t
+
+
 
 (* [prev_letter] is the letter before [s]. *)
 let prev_letter s =
@@ -166,12 +190,79 @@ let valid_move b m =
   if path1 || path2 || path3 || path4 || path5 || path6 || path7 || path8
   then true else false
 
+let not_empty lst =
+  match lst with
+  | [] -> false
+  | _ -> true
+
+(* [build_path] is a list containing the tiles to flip after a turn *)
+let rec build_path dir curr b player lst =
+  match dir with
+  | TL -> let next = top_left curr in
+    let value = List.assoc next b in
+    if value = opponent_value player then build_path dir next b player ((player,next)::lst)
+    else if value = player then lst
+    else []
+  | TR -> let next = top_right curr in
+    let value = List.assoc next b in
+    if value = opponent_value player then build_path dir next b player ((player,next)::lst)
+    else if value = player then lst
+    else []
+  | BL -> let next = bot_left curr in
+    let value = List.assoc next b in
+    if value = opponent_value player then build_path dir next b player ((player,next)::lst)
+    else if value = player then lst
+    else []
+  | BR -> let next = bot_right curr in
+    let value = List.assoc next b in
+    if value = opponent_value player then build_path dir next b player ((player,next)::lst)
+    else if value = player then lst
+    else []
+  | T -> let next = top curr in
+    let value = List.assoc next b in
+    if value = opponent_value player then build_path dir next b player ((player,next)::lst)
+    else if value = player then lst
+    else []
+  | B -> let next = bot curr in
+    let value = List.assoc next b in
+    if value = opponent_value player then build_path dir next b player ((player,next)::lst)
+    else if value = player then lst
+    else []
+  | L -> let next = left curr in
+    let value = List.assoc next b in
+    if value = opponent_value player then build_path dir next b player ((player,next)::lst)
+    else if value = player then lst
+    else []
+  | R -> let next = right curr in
+    let value = List.assoc next b in
+    if value = opponent_value player then build_path dir next b player ((player,next)::lst)
+    else if value = player then lst
+    else []
+
+let flip b a =
+  let (p,c) = a in
+  let temp_b = List.remove_assoc c b in
+  let new_b = (c,p)::temp_b in
+  new_b
+
 let update b m =
   let valid = valid_move b m in
   if valid then
     let temp_b = List.remove_assoc m.coordinate b in
     let new_b = (m.coordinate, m.player)::temp_b in
-    new_b
+
+    let path1 = try build_path TL m.coordinate b m.player [] with _ -> [] in
+    let path2 = try build_path TR m.coordinate b m.player [] with _ -> [] in
+    let path3 = try build_path BL m.coordinate b m.player [] with _ -> [] in
+    let path4 = try build_path BR m.coordinate b m.player [] with _ -> [] in
+    let path5 = try build_path T m.coordinate b m.player [] with _ -> [] in
+    let path6 = try build_path B m.coordinate b m.player [] with _ -> [] in
+    let path7 = try build_path L m.coordinate b m.player [] with _ -> [] in
+    let path8 = try build_path R m.coordinate b m.player [] with _ -> [] in
+    let flips = List.flatten [path1; path2; path3; path4; path5; path6; path7; path8] in
+
+    List.fold_left flip new_b flips
+
   else
     failwith "Invalid Move"
 
