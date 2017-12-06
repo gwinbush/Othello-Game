@@ -31,7 +31,45 @@ let xpm_label_box ~file ~packing () =
 
   GMisc.label ~packing:(box#pack ~padding:0) ()
 
-let rec main () =
+let rec new_game () =
+    let window = GWindow.window ~width:680 ~height:680
+        ~title: "Tile" ~resizable:false () in
+    let vbox = GPack.vbox ~packing:window#add ~border_width:10 () in
+    ignore (window#connect#destroy ~callback:Main.quit);
+
+    let menubar = GMenu.menu_bar ~packing:vbox#pack () in
+    let factory = new GMenu.factory menubar in
+    let accel_group = factory#accel_group in
+    let file_menu = factory#add_submenu "Menu" in
+
+    (* File menu *)
+    let factory = new GMenu.factory file_menu ~accel_group in
+    ignore (factory#add_item "Quit" ~key:_Q ~callback: Main.quit);
+
+    let sub_box = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+    let sub_box1 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+    let sub_box2 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+    let sub_box3 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+    let sub_box4 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+    let sub_box5 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+    let sub_box6 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+    let sub_box7 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+    let sub_box8 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+
+    let box = GPack.vbox ~packing:sub_box3#add ~width:640 ~height:80 () in
+    let button = GButton.button ~packing:box#add () in
+    button#connect#clicked ~callback: (fun () -> window#destroy (); main true () );
+    xpm_label_box ~file:"ai.xpm" ~packing:button#add ();
+
+    let box2 = GPack.vbox ~packing:sub_box4#add ~width:640 ~height:80 () in
+    let button2 = GButton.button ~packing:box2#add () in
+    button2#connect#clicked ~callback: (fun () -> window#destroy (); main false () );
+    xpm_label_box ~file:"noai.xpm" ~packing:button2#add ();
+
+    window#show ();
+    Main.main ()
+
+and main ai () =
   let window = GWindow.window ~width:768 ~height:768
     ~title: "Tile" ~resizable:false () in
 
@@ -69,26 +107,27 @@ let rec main () =
       ("1H", 0); ("2H", 0); ("3H", 0); ("4H", 0); ("5H", 0); ("6H", 0); ("7H", 0); ("8H", 0);
     ] in
 
-let factory = new GMenu.factory file_menu ~accel_group in
-  ignore (factory#add_item "Restart" ~key:_R ~callback: (fun () -> window#destroy (); main ()) );
+  let factory = new GMenu.factory file_menu ~accel_group in
+  ignore (factory#add_item "Restart" ~key:_R ~callback: (fun () -> window#destroy (); new_game ()) );
 
-  draw sboxs vbox empty 1;
+  draw sboxs vbox empty 1 ai;
   window#show ();
 
   Main.main ()
 
-and  make_tile container coord playe (board:Board.board) sub_boxes vbox=
+and make_tile container coord playe (board:Board.board) sub_boxes vbox ai =
   let box = GPack.vbox ~packing:container#add ~width:80 ~height:80 () in
   let button = GButton.button ~packing:box#add () in
   button#connect#clicked ~callback: (fun () ->
       let m = {player = playe;
               coordinate = coord} in
       let new_board = update board m in
-      draw sub_boxes vbox new_board (opp playe)
+      draw sub_boxes vbox new_board (opp playe) ai
     );
   (button,box)
 
-and draw sboxs vbox board pl =
+and draw sboxs vbox board pl ai =
+
 
   let p1_moves = Board.possible_moves board 1 in
   let p2_moves = Board.possible_moves board 2 in
@@ -127,77 +166,77 @@ and draw sboxs vbox board pl =
 
   let game_board = board in
 
-  let r1c1 = fst (make_tile sub_box1 "1A" pl game_board sboxs vbox) in
-  let r1c2 = fst (make_tile sub_box1 "2A" pl game_board sboxs vbox) in
-  let r1c3 = fst (make_tile sub_box1 "3A" pl game_board sboxs vbox) in
-  let r1c4 = fst (make_tile sub_box1 "4A" pl game_board sboxs vbox) in
-  let r1c5 = fst (make_tile sub_box1 "5A" pl game_board sboxs vbox) in
-  let r1c6 = fst (make_tile sub_box1 "6A" pl game_board sboxs vbox) in
-  let r1c7 = fst (make_tile sub_box1 "7A" pl game_board sboxs vbox) in
-  let r1c8 = fst (make_tile sub_box1 "8A" pl game_board sboxs vbox) in
+  let r1c1 = fst (make_tile sub_box1 "1A" pl game_board sboxs vbox ai) in
+  let r1c2 = fst (make_tile sub_box1 "2A" pl game_board sboxs vbox ai) in
+  let r1c3 = fst (make_tile sub_box1 "3A" pl game_board sboxs vbox ai) in
+  let r1c4 = fst (make_tile sub_box1 "4A" pl game_board sboxs vbox ai) in
+  let r1c5 = fst (make_tile sub_box1 "5A" pl game_board sboxs vbox ai) in
+  let r1c6 = fst (make_tile sub_box1 "6A" pl game_board sboxs vbox ai) in
+  let r1c7 = fst (make_tile sub_box1 "7A" pl game_board sboxs vbox ai) in
+  let r1c8 = fst (make_tile sub_box1 "8A" pl game_board sboxs vbox ai) in
 
-  let r2c1 = fst (make_tile sub_box2 "1B" pl game_board sboxs vbox) in
-  let r2c2 = fst (make_tile sub_box2 "2B" pl game_board sboxs vbox) in
-  let r2c3 = fst (make_tile sub_box2 "3B" pl game_board sboxs vbox) in
-  let r2c4 = fst (make_tile sub_box2 "4B" pl game_board sboxs vbox) in
-  let r2c5 = fst (make_tile sub_box2 "5B" pl game_board sboxs vbox) in
-  let r2c6 = fst (make_tile sub_box2 "6B" pl game_board sboxs vbox) in
-  let r2c7 = fst (make_tile sub_box2 "7B" pl game_board sboxs vbox) in
-  let r2c8 = fst (make_tile sub_box2 "8B" pl game_board sboxs vbox) in
+  let r2c1 = fst (make_tile sub_box2 "1B" pl game_board sboxs vbox ai) in
+  let r2c2 = fst (make_tile sub_box2 "2B" pl game_board sboxs vbox ai) in
+  let r2c3 = fst (make_tile sub_box2 "3B" pl game_board sboxs vbox ai) in
+  let r2c4 = fst (make_tile sub_box2 "4B" pl game_board sboxs vbox ai) in
+  let r2c5 = fst (make_tile sub_box2 "5B" pl game_board sboxs vbox ai) in
+  let r2c6 = fst (make_tile sub_box2 "6B" pl game_board sboxs vbox ai) in
+  let r2c7 = fst (make_tile sub_box2 "7B" pl game_board sboxs vbox ai) in
+  let r2c8 = fst (make_tile sub_box2 "8B" pl game_board sboxs vbox ai) in
 
-  let r3c1 = fst (make_tile sub_box3 "1C" pl game_board sboxs vbox) in
-  let r3c2 = fst (make_tile sub_box3 "2C" pl game_board sboxs vbox) in
-  let r3c3 = fst (make_tile sub_box3 "3C" pl game_board sboxs vbox) in
-  let r3c4 = fst (make_tile sub_box3 "4C" pl game_board sboxs vbox) in
-  let r3c5 = fst (make_tile sub_box3 "5C" pl game_board sboxs vbox) in
-  let r3c6 = fst (make_tile sub_box3 "6C" pl game_board sboxs vbox) in
-  let r3c7 = fst (make_tile sub_box3 "7C" pl game_board sboxs vbox) in
-  let r3c8 = fst (make_tile sub_box3 "8C" pl game_board sboxs vbox) in
+  let r3c1 = fst (make_tile sub_box3 "1C" pl game_board sboxs vbox ai) in
+  let r3c2 = fst (make_tile sub_box3 "2C" pl game_board sboxs vbox ai) in
+  let r3c3 = fst (make_tile sub_box3 "3C" pl game_board sboxs vbox ai) in
+  let r3c4 = fst (make_tile sub_box3 "4C" pl game_board sboxs vbox ai) in
+  let r3c5 = fst (make_tile sub_box3 "5C" pl game_board sboxs vbox ai) in
+  let r3c6 = fst (make_tile sub_box3 "6C" pl game_board sboxs vbox ai) in
+  let r3c7 = fst (make_tile sub_box3 "7C" pl game_board sboxs vbox ai) in
+  let r3c8 = fst (make_tile sub_box3 "8C" pl game_board sboxs vbox ai) in
 
-  let r4c1 = fst (make_tile sub_box4 "1D" pl game_board sboxs vbox) in
-  let r4c2 = fst (make_tile sub_box4 "2D" pl game_board sboxs vbox) in
-  let r4c3 = fst (make_tile sub_box4 "3D" pl game_board sboxs vbox) in
-  let r4c4 = fst (make_tile sub_box4 "4D" pl game_board sboxs vbox) in
-  let r4c5 = fst (make_tile sub_box4 "5D" pl game_board sboxs vbox) in
-  let r4c6 = fst (make_tile sub_box4 "6D" pl game_board sboxs vbox) in
-  let r4c7 = fst (make_tile sub_box4 "7D" pl game_board sboxs vbox) in
-  let r4c8 = fst (make_tile sub_box4 "8D" pl game_board sboxs vbox) in
+  let r4c1 = fst (make_tile sub_box4 "1D" pl game_board sboxs vbox ai) in
+  let r4c2 = fst (make_tile sub_box4 "2D" pl game_board sboxs vbox ai) in
+  let r4c3 = fst (make_tile sub_box4 "3D" pl game_board sboxs vbox ai) in
+  let r4c4 = fst (make_tile sub_box4 "4D" pl game_board sboxs vbox ai) in
+  let r4c5 = fst (make_tile sub_box4 "5D" pl game_board sboxs vbox ai) in
+  let r4c6 = fst (make_tile sub_box4 "6D" pl game_board sboxs vbox ai) in
+  let r4c7 = fst (make_tile sub_box4 "7D" pl game_board sboxs vbox ai) in
+  let r4c8 = fst (make_tile sub_box4 "8D" pl game_board sboxs vbox ai) in
 
-  let r5c1 = fst (make_tile sub_box5 "1E" pl game_board sboxs vbox) in
-  let r5c2 = fst (make_tile sub_box5 "2E" pl game_board sboxs vbox) in
-  let r5c3 = fst (make_tile sub_box5 "3E" pl game_board sboxs vbox) in
-  let r5c4 = fst (make_tile sub_box5 "4E" pl game_board sboxs vbox) in
-  let r5c5 = fst (make_tile sub_box5 "5E" pl game_board sboxs vbox) in
-  let r5c6 = fst (make_tile sub_box5 "6E" pl game_board sboxs vbox) in
-  let r5c7 = fst (make_tile sub_box5 "7E" pl game_board sboxs vbox) in
-  let r5c8 = fst (make_tile sub_box5 "8E" pl game_board sboxs vbox) in
+  let r5c1 = fst (make_tile sub_box5 "1E" pl game_board sboxs vbox ai) in
+  let r5c2 = fst (make_tile sub_box5 "2E" pl game_board sboxs vbox ai) in
+  let r5c3 = fst (make_tile sub_box5 "3E" pl game_board sboxs vbox ai) in
+  let r5c4 = fst (make_tile sub_box5 "4E" pl game_board sboxs vbox ai) in
+  let r5c5 = fst (make_tile sub_box5 "5E" pl game_board sboxs vbox ai) in
+  let r5c6 = fst (make_tile sub_box5 "6E" pl game_board sboxs vbox ai) in
+  let r5c7 = fst (make_tile sub_box5 "7E" pl game_board sboxs vbox ai) in
+  let r5c8 = fst (make_tile sub_box5 "8E" pl game_board sboxs vbox ai) in
 
-  let r6c1 = fst (make_tile sub_box6 "1F" pl game_board sboxs vbox) in
-  let r6c2 = fst (make_tile sub_box6 "2F" pl game_board sboxs vbox) in
-  let r6c3 = fst (make_tile sub_box6 "3F" pl game_board sboxs vbox) in
-  let r6c4 = fst (make_tile sub_box6 "4F" pl game_board sboxs vbox) in
-  let r6c5 = fst (make_tile sub_box6 "5F" pl game_board sboxs vbox) in
-  let r6c6 = fst (make_tile sub_box6 "6F" pl game_board sboxs vbox) in
-  let r6c7 = fst (make_tile sub_box6 "7F" pl game_board sboxs vbox) in
-  let r6c8 = fst (make_tile sub_box6 "8F" pl game_board sboxs vbox) in
+  let r6c1 = fst (make_tile sub_box6 "1F" pl game_board sboxs vbox ai) in
+  let r6c2 = fst (make_tile sub_box6 "2F" pl game_board sboxs vbox ai) in
+  let r6c3 = fst (make_tile sub_box6 "3F" pl game_board sboxs vbox ai) in
+  let r6c4 = fst (make_tile sub_box6 "4F" pl game_board sboxs vbox ai) in
+  let r6c5 = fst (make_tile sub_box6 "5F" pl game_board sboxs vbox ai) in
+  let r6c6 = fst (make_tile sub_box6 "6F" pl game_board sboxs vbox ai) in
+  let r6c7 = fst (make_tile sub_box6 "7F" pl game_board sboxs vbox ai) in
+  let r6c8 = fst (make_tile sub_box6 "8F" pl game_board sboxs vbox ai) in
 
-  let r7c1 = fst (make_tile sub_box7 "1G" pl game_board sboxs vbox) in
-  let r7c2 = fst (make_tile sub_box7 "2G" pl game_board sboxs vbox) in
-  let r7c3 = fst (make_tile sub_box7 "3G" pl game_board sboxs vbox) in
-  let r7c4 = fst (make_tile sub_box7 "4G" pl game_board sboxs vbox) in
-  let r7c5 = fst (make_tile sub_box7 "5G" pl game_board sboxs vbox) in
-  let r7c6 = fst (make_tile sub_box7 "6G" pl game_board sboxs vbox) in
-  let r7c7 = fst (make_tile sub_box7 "7G" pl game_board sboxs vbox) in
-  let r7c8 = fst (make_tile sub_box7 "8G" pl game_board sboxs vbox) in
+  let r7c1 = fst (make_tile sub_box7 "1G" pl game_board sboxs vbox ai) in
+  let r7c2 = fst (make_tile sub_box7 "2G" pl game_board sboxs vbox ai) in
+  let r7c3 = fst (make_tile sub_box7 "3G" pl game_board sboxs vbox ai) in
+  let r7c4 = fst (make_tile sub_box7 "4G" pl game_board sboxs vbox ai) in
+  let r7c5 = fst (make_tile sub_box7 "5G" pl game_board sboxs vbox ai) in
+  let r7c6 = fst (make_tile sub_box7 "6G" pl game_board sboxs vbox ai) in
+  let r7c7 = fst (make_tile sub_box7 "7G" pl game_board sboxs vbox ai) in
+  let r7c8 = fst (make_tile sub_box7 "8G" pl game_board sboxs vbox ai) in
 
-  let r8c1 = fst (make_tile sub_box8 "1H" pl game_board sboxs vbox) in
-  let r8c2 = fst (make_tile sub_box8 "2H" pl game_board sboxs vbox) in
-  let r8c3 = fst (make_tile sub_box8 "3H" pl game_board sboxs vbox) in
-  let r8c4 = fst (make_tile sub_box8 "4H" pl game_board sboxs vbox) in
-  let r8c5 = fst (make_tile sub_box8 "5H" pl game_board sboxs vbox) in
-  let r8c6 = fst (make_tile sub_box8 "6H" pl game_board sboxs vbox) in
-  let r8c7 = fst (make_tile sub_box8 "7H" pl game_board sboxs vbox) in
-  let r8c8 = fst (make_tile sub_box8 "8H" pl game_board sboxs vbox) in
+  let r8c1 = fst (make_tile sub_box8 "1H" pl game_board sboxs vbox ai) in
+  let r8c2 = fst (make_tile sub_box8 "2H" pl game_board sboxs vbox ai) in
+  let r8c3 = fst (make_tile sub_box8 "3H" pl game_board sboxs vbox ai) in
+  let r8c4 = fst (make_tile sub_box8 "4H" pl game_board sboxs vbox ai) in
+  let r8c5 = fst (make_tile sub_box8 "5H" pl game_board sboxs vbox ai) in
+  let r8c6 = fst (make_tile sub_box8 "6H" pl game_board sboxs vbox ai) in
+  let r8c7 = fst (make_tile sub_box8 "7H" pl game_board sboxs vbox ai) in
+  let r8c8 = fst (make_tile sub_box8 "8H" pl game_board sboxs vbox ai) in
 
   xpm_label_box ~file:(get_tile (List.assoc "1A" game_board)) ~packing:r1c1#add ();
   xpm_label_box ~file:(get_tile (List.assoc "2A" game_board)) ~packing:r1c2#add ();
@@ -267,13 +306,11 @@ and draw sboxs vbox board pl =
   let state = {current_player = pl;
                game_board = board;
                score = (s1,s2);} in
-  if pl = 2 then
+  if (pl = 2) && ai then
     let ai_board = Board.update board (get_move state) in
-    draw sboxs vbox ai_board (opp pl) else
-
-
+    draw sboxs vbox ai_board (opp pl) true else
 
   ()
 
 
-let () = main ()
+let () = new_game ()
