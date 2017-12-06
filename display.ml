@@ -1,7 +1,13 @@
 open GMain
 open GdkKeysyms
+open State
 open Board
+open Bot
 
+let get_color pl =
+  match pl with
+  | 1 -> "Black"
+  | 2 -> "White"
 
 let opp i =
   match i with
@@ -15,22 +21,18 @@ let get_tile i =
   | 0 -> "empty_tile.xpm"
   | 1 -> "p1.xpm"
   | 2 -> "p2.xpm"
-
 let xpm_label_box ~file ~packing () =
   if not (Sys.file_exists file) then failwith (file ^ " does not exist");
 
-  (* Create box for image and labprerr_endline "Ouch!");el and pack *)
-  let box = GPack.hbox ~border_width:2 ~packing () in
+  let box = GPack.hbox ~border_width:0 ~packing () in
 
-  (* Now on to the image stuff and pack into box *)
   let pixmap = GDraw.pixmap_from_xpm ~file () in
   GMisc.pixmap pixmap ~packing:(box#pack ~padding:3) ();
 
-  (* Create a label for the button and pack into box *)
-  GMisc.label ~packing:(box#pack ~padding:3) ()
+  GMisc.label ~packing:(box#pack ~padding:0) ()
 
 let rec main () =
-  let window = GWindow.window ~width:960 ~height:960
+  let window = GWindow.window ~width:768 ~height:768
     ~title: "Tile" ~resizable:false () in
 
   let vbox = GPack.vbox ~packing:window#add ~border_width:10 () in
@@ -45,15 +47,16 @@ let rec main () =
   let factory = new GMenu.factory file_menu ~accel_group in
   ignore (factory#add_item "Quit" ~key:_Q ~callback: Main.quit);
 
-  let sub_box1 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
-  let sub_box2 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
-  let sub_box3 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
-  let sub_box4 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
-  let sub_box5 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
-  let sub_box6 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
-  let sub_box7 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
-  let sub_box8 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
-  let sboxs = [sub_box1; sub_box2; sub_box3; sub_box4; sub_box5; sub_box6; sub_box7; sub_box8] in
+  let sub_box = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sub_box1 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sub_box2 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sub_box3 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sub_box4 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sub_box5 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sub_box6 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sub_box7 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sub_box8 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sboxs = [sub_box; sub_box1; sub_box2; sub_box3; sub_box4; sub_box5; sub_box6; sub_box7; sub_box8] in
 
   let empty =
     [ ("1A", 0); ("2A", 0); ("3A", 0); ("4A", 0); ("5A", 0); ("6A", 0); ("7A", 0); ("8A", 0);
@@ -67,7 +70,7 @@ let rec main () =
     ] in
 
 let factory = new GMenu.factory file_menu ~accel_group in
-  ignore (factory#add_item "Restart" ~key:_R ~callback: (fun () -> main ()) );
+  ignore (factory#add_item "Restart" ~key:_R ~callback: (fun () -> window#destroy (); main ()) );
 
   draw sboxs vbox empty 1;
   window#show ();
@@ -75,7 +78,7 @@ let factory = new GMenu.factory file_menu ~accel_group in
   Main.main ()
 
 and  make_tile container coord playe (board:Board.board) sub_boxes vbox=
-  let box = GPack.vbox ~packing:container#add ~width:100 ~height:100 () in
+  let box = GPack.vbox ~packing:container#add ~width:80 ~height:80 () in
   let button = GButton.button ~packing:box#add () in
   button#connect#clicked ~callback: (fun () ->
       let m = {player = playe;
@@ -86,17 +89,41 @@ and  make_tile container coord playe (board:Board.board) sub_boxes vbox=
   (button,box)
 
 and draw sboxs vbox board pl =
+
+  let p1_moves = Board.possible_moves board 1 in
+  let p2_moves = Board.possible_moves board 2 in
+  let pl = match pl with
+    | 1 -> if p1_moves = [] then 2 else 1
+    | 2 -> if p2_moves = [] then 1 else 2 in
+
+  let (s1, s2) = Board.get_score board in
+
+  let winner = if p1_moves = [] && p2_moves = [] then
+      (if s1 > s2 then 1 else 2)
+    else 0 in
+
+  let win_label = if winner = 0 then ""
+    else (get_color winner) ^ " wins!" in
+
+  let info_label = "Score:\tBlack: " ^(string_of_int (s1))
+                   ^ "\tWhite: " ^ (string_of_int (s2))
+                   ^ "\nTurn: " ^ (get_color pl)
+                   ^ "\n" ^ win_label in
+
   List.map (fun x -> x#destroy ()) sboxs;
 
-  let sub_box1 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
-  let sub_box2 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
-  let sub_box3 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
-  let sub_box4 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
-  let sub_box5 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
-  let sub_box6 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
-  let sub_box7 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
-  let sub_box8 = GPack.hbox ~packing:vbox#add ~width:800 ~height:100 () in
-  let sboxs = [sub_box1; sub_box2; sub_box3; sub_box4; sub_box5; sub_box6; sub_box7; sub_box8] in
+  let sub_box = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sub_box1 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sub_box2 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sub_box3 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sub_box4 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sub_box5 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sub_box6 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sub_box7 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sub_box8 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
+  let sboxs = [sub_box; sub_box1; sub_box2; sub_box3; sub_box4; sub_box5; sub_box6; sub_box7; sub_box8] in
+
+  let label = GMisc.label ~text:info_label ~packing:sub_box#add () in
 
   let game_board = board in
 
@@ -236,6 +263,16 @@ and draw sboxs vbox board pl =
   xpm_label_box ~file:(get_tile (List.assoc "6H" game_board)) ~packing:r8c6#add ();
   xpm_label_box ~file:(get_tile (List.assoc "7H" game_board)) ~packing:r8c7#add ();
   xpm_label_box ~file:(get_tile (List.assoc "8H" game_board)) ~packing:r8c8#add ();
+
+  let state = {current_player = pl;
+               game_board = board;
+               score = (s1,s2);} in
+  if pl = 2 then
+    let ai_board = Board.update board (get_move state) in
+    draw sboxs vbox ai_board (opp pl) else
+
+
+
   ()
 
 
