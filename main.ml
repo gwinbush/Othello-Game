@@ -53,9 +53,7 @@ let rec repl c s =
     | exception End_of_file -> ()
     | command -> repl command new_s
 
-(* [main ()] starts the REPL, which prompts for a game to play.
- * You are welcome to improve the user interface, but it must
- * still prompt for a game to play rather than hardcode a game file. *)
+(* [main ()] starts the REPL, which prompts for a game to play. *)
 let main () =
   ANSITerminal.(print_string [red]
                   "\n\nWelcome to Othello.\n");

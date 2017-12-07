@@ -3,6 +3,7 @@ type command = {
 	coordinate: string;
 }
 
+(* [helper] is the command when the user places a tile*)
 let helper str =
   let space = try String.index str ' '
     with Not_found -> -1 in
@@ -19,8 +20,5 @@ let helper str =
 let parse str =
 	let str' = String.lowercase_ascii str in
 	match str' with
-	| "help" -> {verb = "help"; coordinate = ""}
 	| "quit" -> {verb = "quit";coordinate = ""}
-	| "restart" -> {verb = "restart";coordinate = ""}
-	| "score" -> {verb =  "score"; coordinate = ""}
 	| _ -> helper str

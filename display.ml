@@ -4,23 +4,28 @@ open State
 open Board
 open Bot
 
+(* [get_color] is the string representing the color of player [pl]*)
 let get_color pl =
   match pl with
   | 1 -> "Black"
   | 2 -> "White"
 
+(* [opp] is the opponent of [i]*)
 let opp i =
   match i with
   | 1 -> 2
   | 2 -> 1
 
-let locale = GtkMain.Main.init ()
-
+(* [get_tile] is the image file corresponding to the player [i] or empty*)
 let get_tile i =
   match i with
   | 0 -> "empty_tile.xpm"
   | 1 -> "p1.xpm"
   | 2 -> "p2.xpm"
+
+let locale = GtkMain.Main.init ()
+
+(* [xpm_label_box] packs an image into a box that is used for a game tile*)
 let xpm_label_box ~file ~packing () =
   if not (Sys.file_exists file) then failwith (file ^ " does not exist");
 
@@ -31,6 +36,7 @@ let xpm_label_box ~file ~packing () =
 
   GMisc.label ~packing:(box#pack ~padding:0) ()
 
+(* [new_game] creates a game window showing the initial game screen*)
 let rec new_game () =
     let window = GWindow.window ~width:680 ~height:680
         ~title: "Tile" ~resizable:false () in
@@ -69,6 +75,7 @@ let rec new_game () =
     window#show ();
     Main.main ()
 
+(* [main] creates a game window showing the gameplay screen*)
 and main ai () =
   let window = GWindow.window ~width:768 ~height:768
     ~title: "Tile" ~resizable:false () in
@@ -115,6 +122,7 @@ and main ai () =
 
   Main.main ()
 
+(* [make_tile] created a button representing a game tile*)
 and make_tile container coord playe (board:Board.board) sub_boxes vbox ai =
   let box = GPack.vbox ~packing:container#add ~width:80 ~height:80 () in
   let button = GButton.button ~packing:box#add () in
@@ -126,8 +134,8 @@ and make_tile container coord playe (board:Board.board) sub_boxes vbox ai =
     );
   (button,box)
 
+(* [draw] updates the game window after a change is made to the board*)
 and draw sboxs vbox board pl ai =
-
 
   let p1_moves = Board.possible_moves board 1 in
   let p2_moves = Board.possible_moves board 2 in
@@ -307,7 +315,7 @@ and draw sboxs vbox board pl ai =
                game_board = board;
                score = (s1,s2);} in
   if (pl = 2) && ai then
-    let ai_board = Board.update board (get_move state) in
+    let ai_board = Board.update board (get_alpha_beta_move state) in
     draw sboxs vbox ai_board (opp pl) true else
 
   ()
