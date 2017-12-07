@@ -62,15 +62,30 @@ let rec new_game () =
     let sub_box7 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
     let sub_box8 = GPack.hbox ~packing:vbox#add ~width:640 ~height:80 () in
 
-    let box = GPack.vbox ~packing:sub_box3#add ~width:640 ~height:80 () in
-    let button = GButton.button ~packing:box#add () in
-    button#connect#clicked ~callback: (fun () -> window#destroy (); main true () );
-    xpm_label_box ~file:"ai.xpm" ~packing:button#add ();
 
-    let box2 = GPack.vbox ~packing:sub_box4#add ~width:640 ~height:80 () in
+    let box = GPack.vbox ~packing:sub_box2#add ~width:640 ~height:80 () in
+    let button = GButton.button ~packing:box#add () in
+    button#connect#clicked ~callback: (fun () -> window#destroy (); main 0 () );
+    xpm_label_box ~file:"noai.xpm" ~packing:button#add ();
+
+    (*easy bot*)
+    let box2 = GPack.vbox ~packing:sub_box3#add ~width:640 ~height:80 () in
     let button2 = GButton.button ~packing:box2#add () in
-    button2#connect#clicked ~callback: (fun () -> window#destroy (); main false () );
-    xpm_label_box ~file:"noai.xpm" ~packing:button2#add ();
+    button2#connect#clicked ~callback: (fun () -> window#destroy (); main 1 () );
+    xpm_label_box ~file:"easy.xpm" ~packing:button2#add ();
+
+    (*medium bot*)
+    let box3 = GPack.vbox ~packing:sub_box4#add ~width:640 ~height:80 () in
+    let button3 = GButton.button ~packing:box3#add () in
+    button3#connect#clicked ~callback: (fun () -> window#destroy (); main 2 () );
+    xpm_label_box ~file:"medium.xpm" ~packing:button3#add ();
+
+    (*hard bot*)
+    let box4 = GPack.vbox ~packing:sub_box5#add ~width:640 ~height:80 () in
+    let button4 = GButton.button ~packing:box4#add () in
+    button4#connect#clicked ~callback: (fun () -> window#destroy (); main 3 () );
+    xpm_label_box ~file:"hard.xpm" ~packing:button4#add ();
+
 
     window#show ();
     Main.main ()
@@ -314,11 +329,24 @@ and draw sboxs vbox board pl ai =
   let state = {current_player = pl;
                game_board = board;
                score = (s1,s2);} in
-  if (pl = 2) && ai then
-    let ai_board = Board.update board (get_alpha_beta_move state) in
-    draw sboxs vbox ai_board (opp pl) true else
-
-  ()
+  if (pl = 2) then
+    match ai with
+    | 1 ->
+      begin
+        let ai_board = Board.update board (get_easy_ai_move state) in
+        draw sboxs vbox ai_board (opp pl) 1
+      end
+    | 2 ->
+      begin
+        let ai_board = Board.update board (get_move state) in
+        draw sboxs vbox ai_board (opp pl) 2
+      end
+    | 3 ->
+      begin
+        let ai_board = Board.update board (get_alpha_beta_move state) in
+        draw sboxs vbox ai_board (opp pl) 3
+      end
+    | _ -> ()
 
 
 let () = new_game ()
